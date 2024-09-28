@@ -1,11 +1,11 @@
 package com.parquimetro.api.repository;
 
-import com.parquimetro.api.dto.Cadastro;
+import com.parquimetro.api.enums.Veiculos;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
 @EnableSpringDataWebSupport
-public interface CadastroRepository extends JpaRepository<Cadastro, Long> {
+public interface CadastroRepository extends JpaRepository<Veiculos, Long> {
 
 
     }
