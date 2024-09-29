@@ -1,14 +1,13 @@
-package com.parquimetro.api.enums;
+package com.parquimetro.api.entitys;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.parquimetro.api.dto.DadosCadastroVeiculos;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.validation.constraints.NotBlank;
+import lombok.*;
 
-import java.time.LocalDate;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
@@ -24,20 +23,28 @@ public class Veiculos {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String placa;
-    LocalDateTime dia_hora;
-    LocalTime tempo;
-    private float valor;
+    private LocalDateTime dia_hora;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    private LocalTime entrada;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss")
+    private LocalTime saida;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "MM")
+    private long permanecia;
+    private private valor;
+
+
 
 
     public Veiculos(DadosCadastroVeiculos dados) {
         this.placa = dados.placa();
         this.dia_hora = LocalDateTime.now();
-        this.tempo = dados.tempo();
+        this.entrada = dados.entrada();
+        this.saida = dados.saida();
+        this.permanecia = Duration.between(entrada, saida).toMinutes();
         this.valor = dados.valor();
 
 
     }
+
+
 }
-
-
-
