@@ -5,7 +5,7 @@ create table parquimetro (
         entrada TIME not null,
         saida TIME not null,
         permanecia VARCHAR(255),
-        valor float(30) not null,
+        valor float(3),
 
         primary key(id)
 )

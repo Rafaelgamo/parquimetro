@@ -20,7 +20,7 @@ public record DadosCadastroVeiculos(
         LocalDateTime dia_hora,
         LocalTime entrada,
         LocalTime saida,
-        long permanencia,
+        Long permanencia,
 
         @NotBlank
         float valor
@@ -29,5 +29,7 @@ public record DadosCadastroVeiculos(
 
 
 {
-        public class valores()}|
+
+
+
 }

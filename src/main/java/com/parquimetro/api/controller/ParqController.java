@@ -1,6 +1,7 @@
 package com.parquimetro.api.controller;
 
 
+import com.parquimetro.api.dto.ConsultaValor;
 import com.parquimetro.api.dto.DadosCadastroVeiculos;
 import com.parquimetro.api.dto.ConsultaVeiculos;
 import com.parquimetro.api.repository.CadastroRepository;
@@ -23,7 +24,7 @@ public class ParqController {
     @PostMapping /*mapeia  o metodo post, que recebe dados do cadastro*/
     @Transactional /* transição com banco e dados */
     public void cadastroEstacionar(@RequestBody DadosCadastroVeiculos dados) { /* Recebe dos dados para salvar */
-         repository.save(new Veiculos(dados));
+        repository.save(new Veiculos(dados));
 
     }
     @GetMapping  /* identifica metodo consultadar dados do banco */
@@ -32,5 +33,12 @@ public class ParqController {
         return ResponseEntity.ok(page);
     }
 
+    public void valores(ConsultaValor dados){
+
     }
+
+}
+
+
+
 
