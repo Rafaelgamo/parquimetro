@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.26.xsd">
+
+    <property name="now" value="CURRENT_TIMESTAMP()" dbms="mysql"/>
+    <property name="now" value="NOW()" dbms="postgresql"/>
+
+    <changeSet id="initialize-veiculo-table" author="caio-alves" runAlways="false" runOnChange="false">
+        <preConditions onFail="WARN" onFailMessage="Table needs to exists for it to be initialized: 'veiculo'">
+            <tableExists tableName="veiculo" />
+            <and>
+                <rowCount tableName="veiculo" expectedRows="0" />
+            </and>
+        </preConditions>
+
+        <insert tableName="veiculo">
+            <column name="id">1</column>
+            <column name="placa">ABC-1234</column>
+        </insert>
+
+        <insert tableName="veiculo">
+            <column name="id">2</column>
+            <column name="placa">QFG-5876</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="initialize-parquimetro-table" author="caio-alves" runAlways="false" runOnChange="false">
+        <preConditions onFail="WARN" onFailMessage="Table needs to exists for it to be initialized: 'parquimetro'">
+            <tableExists tableName="parquimetro" />
+            <and>
+                <rowCount tableName="parquimetro" expectedRows="0" />
+            </and>
+        </preConditions>
+
+        <insert tableName="parquimetro">
+            <column name="id">1</column>
+            <column name="endereco">Rua Polo Fiap, SP</column>
+            <column name="valor_tarifa_atual">0.5</column>
+        </insert>
+
+        <insert tableName="parquimetro">
+            <column name="id">2</column>
+            <column name="endereco">Rua Cristo Redentor, RJ</column>
+            <column name="valor_tarifa_atual">0.8</column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="initialize-vaga-table" author="caio-alves" runAlways="false" runOnChange="false">
+        <preConditions onFail="WARN" onFailMessage="Table needs to exists for it to be initialized: 'vaga'">
+            <tableExists tableName="vaga" />
+            <and>
+                <rowCount tableName="vaga" expectedRows="0" />
+            </and>
+        </preConditions>
+
+        <insert tableName="vaga">
+            <column name="id">1</column>
+            <column name="id_parquimetro">1</column>
+        </insert>
+
+        <insert tableName="vaga">
+            <column name="id">2</column>
+            <column name="id_parquimetro">1</column>
+        </insert>
+
+        <insert tableName="vaga">
+            <column name="id">3</column>
+            <column name="id_parquimetro">1</column>
+        </insert>
+
+
+        <insert tableName="vaga">
+            <column name="id">4</column>
+            <column name="id_parquimetro">2</column>
+        </insert>
+
+        <insert tableName="vaga">
+            <column name="id">5</column>
+            <column name="id_parquimetro">2</column>
+        </insert>
+    </changeSet>
+
+</databaseChangeLog>

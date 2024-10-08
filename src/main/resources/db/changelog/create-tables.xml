@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.26.xsd">
+
+    <property name="now" value="CURRENT_TIMESTAMP()" dbms="mysql"/>
+    <property name="now" value="NOW()" dbms="postgresql"/>
+
+    <changeSet author="caio-alves" id="create-tables-veiculo">
+        <createTable tableName="veiculo">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+
+            <column name="placa" type="VARCHAR(10)">
+                <constraints nullable="false" unique="true" />
+            </column>
+        </createTable>
+
+        <createIndex unique="true" indexName="veiculo_id" tableName="veiculo">
+            <column name="id"/>
+        </createIndex>
+
+        <createIndex unique="true" indexName="veiculo_placa" tableName="veiculo">
+            <column name="placa"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="caio-alves" id="create-tables-parquimetro">
+        <createTable tableName="parquimetro">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+
+            <column name="endereco" type="VARCHAR(120)">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="valor_tarifa_atual" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <createIndex unique="true" indexName="parquimetro_id" tableName="parquimetro">
+            <column name="id"/>
+        </createIndex>
+    </changeSet>
+
+    <changeSet author="caio-alves" id="create-tables-vaga">
+        <createTable tableName="vaga">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+
+            <column name="id_parquimetro" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="ocupada" type="bit" defaultValue="0" />
+
+        </createTable>
+
+        <createIndex unique="true" indexName="vaga_id" tableName="vaga">
+            <column name="id"/>
+        </createIndex>
+
+        <createIndex unique="true" indexName="vaga_parquimetro_id" tableName="vaga">
+            <column name="id"/>
+        </createIndex>
+
+        <addForeignKeyConstraint
+                constraintName="vaga_parquimetro_fk"
+                baseColumnNames="id_parquimetro"
+                baseTableName="vaga"
+                referencedColumnNames="id"
+                referencedTableName="parquimetro"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"
+                validate="true" />
+    </changeSet>
+
+    <changeSet author="caio-alves" id="create-tables-ocupacao">
+        <createTable tableName="ocupacao">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+
+            <column name="id_vaga" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="id_veiculo" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="tarifa_aplicada" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="minutos_reservados" type="INT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="valor_em_reais" type="FLOAT">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="horario_entrada" type="DATETIME" defaultValueDate="${now}">
+                <constraints nullable="false"/>
+            </column>
+
+            <column name="horario_saida" type="DATETIME"/>
+
+        </createTable>
+
+        <createIndex unique="true" indexName="ocupacao_id" tableName="ocupacao">
+            <column name="id"/>
+        </createIndex>
+
+        <createIndex indexName="ocupacao_vaga_id" tableName="ocupacao">
+            <column name="id_vaga"/>
+        </createIndex>
+
+        <createIndex indexName="ocupacao_veiculo_id" tableName="ocupacao">
+            <column name="id_veiculo"/>
+        </createIndex>
+
+        <addForeignKeyConstraint
+                constraintName="ocupacao_vaga_fk"
+                baseColumnNames="id_vaga"
+                baseTableName="ocupacao"
+                referencedColumnNames="id"
+                referencedTableName="vaga"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"
+                validate="true" />
+
+        <addForeignKeyConstraint
+                constraintName="ocupacao_veiculo_fk"
+                baseColumnNames="id_veiculo"
+                baseTableName="ocupacao"
+                referencedColumnNames="id"
+                referencedTableName="veiculo"
+                onDelete="CASCADE"
+                onUpdate="CASCADE"
+                validate="true" />
+
+    </changeSet>
+
+</databaseChangeLog>
