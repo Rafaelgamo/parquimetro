@@ -1,20 +1,22 @@
 package com.parquimetro.api.infra;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
-public class ExceptionHandler {
+public class ParquimetroExceptionHandler {
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(EnumConstantNotPresentException.class)
-    public ResponseEntity tratarError404(){
-        return ResponseEntity.notFound().build();
+    @ExceptionHandler(EnumConstantNotPresentException.class)
+    public ResponseEntity<Object> tratarError404(){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Recurso não encontrado");
     }
 
-    @org.springframework.web.bind.annotation.ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity tratarErro400(MethodArgumentNotValidException ex){
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Object> tratarErro400(MethodArgumentNotValidException ex){
         var erros = ex.getFieldErrors();
         return ResponseEntity.badRequest().body(erros.stream().map(DadosErroValidacao :: new).toList());
     }

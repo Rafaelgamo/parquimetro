@@ -1,7 +1,7 @@
 package com.parquimetro.api.dto;
 
 
-import com.parquimetro.api.entitys.Veiculos;
+import com.parquimetro.api.entitys.Veiculo;
 import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
 
@@ -15,14 +15,14 @@ public record ConsultaVeiculosDTO(long id, String placa, LocalDateTime dia_hora,
 
 
 
-    public ConsultaVeiculosDTO(Veiculos veiculos) {
-        this(veiculos.getId(), veiculos.getPlaca(), veiculos.getDia_hora(), veiculos.getEntrada(),
-                veiculos.getSaida(), veiculos.getPermanecia(),
-                veiculos.getValor());
-
-
-
-    }
+//    public ConsultaVeiculosDTO(Veiculo veiculo) {
+//        this(veiculo.getId(), veiculo.getPlaca(), veiculo.getDia_hora(), veiculo.getEntrada(),
+//                veiculo.getSaida(), veiculo.getPermanecia(),
+//                veiculo.getValor());
+//
+//
+//
+//    }
 
 
 }
