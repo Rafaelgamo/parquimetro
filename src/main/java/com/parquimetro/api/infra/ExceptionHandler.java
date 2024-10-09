@@ -24,5 +24,4 @@ public class ExceptionHandler {
             this(erro.getField(), erro.getDefaultMessage());
         }
     }
-
 }
