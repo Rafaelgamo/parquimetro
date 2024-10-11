@@ -14,26 +14,25 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping ("tb_veiculos")
-public class VeiculosController {
+@RequestMapping ("/veiculos")
+public class VeiculoController {
 
-    @Autowired /* */
-    private VeiculosRepository repository;  /*vincula as bibliotecas do jpa, que esta como abstrato em interface */
+    @Autowired
+    private VeiculosRepository repository;
 
-    @PostMapping /*mapeia  o metodo post, que recebe dados do cadastro*/
-    @Transactional /* transição com banco e dados */
-    public ResponseEntity cadastroEstacionar(@RequestBody VeiculosDTO dados, UriComponentsBuilder uriBuilder) { /* Recebe dos dados para salvar */
+    @PostMapping
+    @Transactional
+    public ResponseEntity cadastroEstacionar(@RequestBody VeiculosDTO dados, UriComponentsBuilder uriBuilder) {
         var veiculo = new Veiculos(dados);
         repository.save(veiculo);
-        var uri = uriBuilder.path("/tb_veiculos/{id}").buildAndExpand(veiculo.getId()).toUri();
+        var uri = uriBuilder.path("/tb_veiculos/{id}").buildAndExpand(veiculo).toUri();
         return ResponseEntity.created(uri).body(new DetalhamentoVeiculoDTO(veiculo));
     }
 
-   @GetMapping  /* id,  biuld deentifica metodo consultadar dados do banco */
-    public ResponseEntity<Page<ConsultaVeiculosDTO>> listar(@PageableDefault(size = 10, sort = {"placa"}) Pageable paginacao) {  /* mapeia  para mostrar paginação  e consultadar dados do banco*/
+   @GetMapping
+    public ResponseEntity<Page<ConsultaVeiculosDTO>> listar(@PageableDefault(size = 10, sort = {"placa"}) Pageable paginacao) {
         var page = repository.findAll(paginacao).map(ConsultaVeiculosDTO::new);
         return ResponseEntity.ok(page);
     }
+
 }
-
-
