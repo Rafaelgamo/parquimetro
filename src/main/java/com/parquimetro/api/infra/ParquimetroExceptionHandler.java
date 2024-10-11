@@ -26,5 +26,4 @@ public class ParquimetroExceptionHandler {
             this(erro.getField(), erro.getDefaultMessage());
         }
     }
-
 }
