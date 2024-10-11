@@ -13,22 +13,23 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping("tb_parquimetros")
+@RequestMapping("/parquimetros")
 public class ParquimetroController {
 
     @Autowired /* */
     private ParquimetrosRepository parquimetrosRepository;  /*vincula as bibliotecas do jpa, que esta como abstrato em interface */
 
-    @PostMapping /*mapeia  o metodo post, que recebe dados do cadastro*/
-    @Transactional /* transição com banco e dados */
+    @PostMapping
+    @Transactional
     public ResponseEntity cadastroParquimetro(@RequestBody ParquimetrosDTO dados, UriComponentsBuilder uriBuilder) { /* Recebe dos dados para salvar */
         var parquimetro = new Parquimetros(dados);
         parquimetrosRepository.save(parquimetro);
-        var uri = uriBuilder.path("/tb_parquimetros/{id}").buildAndExpand(parquimetro.getId()).toUri();
+
+        var uri = uriBuilder.path("/parquimetros/{id}").buildAndExpand(parquimetro).toUri();
         return ResponseEntity.created(uri).body(new DetalhamentoParquimetroDTO(parquimetro));
     }
 
-    @GetMapping  /* id,  biuld deentifica metodo consultadar dados do banco */
+    @GetMapping
     public ResponseEntity<Page<ConsultaParquimetroDTO>> listarParquimetros(@PageableDefault(size = 10, sort = {"endereco"}) Pageable paginacao) {  /* mapeia  para mostrar paginação  e consultadar dados do banco*/
         var page = parquimetrosRepository.findAll(paginacao).map(ConsultaParquimetroDTO::new);
         return ResponseEntity.ok(page);
