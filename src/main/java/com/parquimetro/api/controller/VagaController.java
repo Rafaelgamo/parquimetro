@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(name ="/vagas")
+@RequestMapping("/vagas")
 public class VagaController {
 
     private final VagaService vagaService;
@@ -26,15 +26,15 @@ public class VagaController {
     }
 
     @PostMapping
-    public ResponseEntity<CreatedEntityIdDTO> cadastroParquimetro(@Valid @RequestBody VagaDTO vagaDTO) {
-        var idCadastrado = vagaService.criarVaga(vagaDTO);
+    public ResponseEntity<CreatedEntityIdDTO> cadastrarVaga(@Valid @RequestBody VagaDTO vagaDTO) {
+        var idCadastrado = vagaService.cadastrarVaga(vagaDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(new CreatedEntityIdDTO(idCadastrado));
     }
 
     @GetMapping
-    public ResponseEntity<List<Vaga>> listarOcupacao() {
+    public ResponseEntity<List<Vaga>> listarVagasDisponiveis() {
         var page = vagaService.listarVagasDisponveis();
         return ResponseEntity.ok(page);
     }
-}
 
+}

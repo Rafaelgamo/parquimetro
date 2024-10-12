@@ -38,7 +38,7 @@ public class VagaService {
     }
 
     @Transactional
-    public Long criarVaga(VagaDTO vagaDTO) {
+    public Long cadastrarVaga(VagaDTO vagaDTO) {
         var vaga = new Vaga();
 
         var idParquimetro = vagaDTO.idParquimetro();

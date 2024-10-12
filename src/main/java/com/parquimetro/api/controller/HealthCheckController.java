@@ -6,11 +6,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/info")
-public class TesteController {
+@RequestMapping("/hello-world")
+public class HealthCheckController {
 
     @GetMapping
     public ResponseEntity<String> info() {
         return ResponseEntity.ok("\nPARQUIMETRO-API: Rodando\n");
     }
+
 }

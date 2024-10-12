@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping(name ="/ocupacao")
+@RequestMapping("/ocupacao")
 public class OcupacaoController {
 
     private final OcupacaoService ocupacaoService;
@@ -21,7 +21,7 @@ public class OcupacaoController {
     }
 
     @PostMapping
-    public ResponseEntity cadastroOcupacao(@RequestBody OcuparVagaDTO dados, UriComponentsBuilder uriBuilder) {
+    public ResponseEntity<CreatedEntityIdDTO> cadastroOcupacao(@RequestBody OcuparVagaDTO dados, UriComponentsBuilder uriBuilder) {
         var ocupacao = ocupacaoService.ocuparVaga(dados);
         var uri = uriBuilder.path("/tb_ocupacao/{id}").buildAndExpand(ocupacao.getId()).toUri();
         return ResponseEntity.created(uri).body(new CreatedEntityIdDTO(ocupacao.getId()));
