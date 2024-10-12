@@ -4,7 +4,6 @@ import com.parquimetro.api.dto.CreatedEntityIdDTO;
 import com.parquimetro.api.dto.ParquimetroDTO;
 import com.parquimetro.api.services.ParquimetroService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -20,8 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/parquimetros")
 public class ParquimetroController {
 
-    @Autowired
-    private ParquimetroService parquimetroService;
+    private final ParquimetroService parquimetroService;
+
+    public ParquimetroController(ParquimetroService parquimetroService) {
+        this.parquimetroService = parquimetroService;
+    }
 
     @PostMapping
     public ResponseEntity<CreatedEntityIdDTO> cadastroParquimetro(@Valid @RequestBody ParquimetroDTO dados) {

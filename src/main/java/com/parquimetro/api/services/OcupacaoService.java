@@ -4,9 +4,9 @@ package com.parquimetro.api.services;
 import com.parquimetro.api.dto.OcuparVagaDTO;
 import com.parquimetro.api.entitys.Ocupacao;
 import com.parquimetro.api.repository.OcupacaoRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class OcupacaoService {
