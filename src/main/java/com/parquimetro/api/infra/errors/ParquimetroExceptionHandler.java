@@ -1,4 +1,4 @@
-package com.parquimetro.api.infra;
+package com.parquimetro.api.infra.errors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

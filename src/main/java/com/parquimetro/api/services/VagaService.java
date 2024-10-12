@@ -1,26 +1,71 @@
 package com.parquimetro.api.services;
 
 
-import com.parquimetro.api.dto.OcupacaoDTO;
-import com.parquimetro.api.entitys.Ocupacao;
-import com.parquimetro.api.entitys.Vagas;
-import com.parquimetro.api.repository.OcupacaoRepository;
+import com.parquimetro.api.dto.VagaDTO;
+import com.parquimetro.api.entitys.Parquimetro;
+import com.parquimetro.api.entitys.Vaga;
 import com.parquimetro.api.repository.VagaRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Duration;
-import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class VagaService {
-        @Autowired
-        private VagaRepository vagaRepository;
 
-        public List<Vagas> listarVagasDisponveis() {
-                return vagaRepository.findAllByOcupadaFalse();
+    private final VagaRepository vagaRepository;
+    private final ParquimetroService parquimetroService;
+
+    public VagaService(VagaRepository vagaRepository, ParquimetroService parquimetroService) {
+        this.vagaRepository = vagaRepository;
+        this.parquimetroService = parquimetroService;
+    }
+
+    @Transactional(readOnly = true)
+    public Vaga buscarPorId(Long idVaga) {
+        var entidade = vagaRepository.findById(idVaga).orElse(null);
+        return entidade;
+    }
+
+    @Transactional(readOnly = true)
+    public List<VagaDTO> listarVagasDisponveis() {
+        return vagaRepository.findAllByOcupadaFalse()
+                .stream()
+                .map(VagaDTO::new)
+                .toList();
+    }
+
+    @Transactional
+    public boolean verificarOcupacao(Long idVaga) {
+        var vaga = vagaRepository.findById(idVaga);
+
+        if (vaga.isEmpty()) {
+            throw new RuntimeException("Vaga nao existe pelo id: " + idVaga);
         }
+
+        return vaga.get().getOcupada();
+    }
+
+    @Transactional
+    public Long cadastrarVaga(VagaDTO vagaDTO) {
+        var vaga = new Vaga();
+
+        var idParquimetro = vagaDTO.idParquimetro();
+        boolean parquimetroExiste = parquimetroService.existePorId(idParquimetro);
+        if (!parquimetroExiste) {
+            throw new RuntimeException("Parquimetro especificado nao existe");
+        }
+
+        var parquimetro = new Parquimetro();
+        parquimetro.setId(idParquimetro);
+
+        vaga.setParquimetro(parquimetro);
+
+        var vagaSalva = vagaRepository.save(vaga);
+        return vagaSalva.getId();
+    }
+
+    public void liberarVaga(Long idVaga) {
+        vagaRepository.liberarVaga(idVaga);
+    }
 }

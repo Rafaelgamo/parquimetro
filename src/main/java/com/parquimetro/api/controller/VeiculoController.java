@@ -1,37 +1,39 @@
 package com.parquimetro.api.controller;
 
 
-import com.parquimetro.api.dto.*;
-import com.parquimetro.api.repository.VeiculosRepository;
-import com.parquimetro.api.entitys.Veiculos;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.parquimetro.api.dto.CreatedEntityIdDTO;
+import com.parquimetro.api.dto.VeiculoDTO;
+import com.parquimetro.api.services.VeiculoService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping ("/veiculos")
 public class VeiculoController {
 
-    @Autowired
-    private VeiculosRepository repository;
+    private final VeiculoService veiculoService;
+
+    public VeiculoController(VeiculoService veiculoService) {
+        this.veiculoService = veiculoService;
+    }
 
     @PostMapping
-    @Transactional
-    public ResponseEntity cadastroEstacionar(@RequestBody VeiculosDTO dados, UriComponentsBuilder uriBuilder) {
-        var veiculo = new Veiculos(dados);
-        repository.save(veiculo);
-        var uri = uriBuilder.path("/tb_veiculos/{id}").buildAndExpand(veiculo).toUri();
-        return ResponseEntity.created(uri).body(new DetalhamentoVeiculoDTO(veiculo));
+    public ResponseEntity<CreatedEntityIdDTO> cadastroEstacionar(@RequestBody VeiculoDTO dados) {
+        var idCadastrado = veiculoService.cadastrarVeiculo(dados);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new CreatedEntityIdDTO(idCadastrado));
     }
 
    @GetMapping
-    public ResponseEntity<Page<ConsultaVeiculosDTO>> listar(@PageableDefault(size = 10, sort = {"placa"}) Pageable paginacao) {
-        var page = repository.findAll(paginacao).map(ConsultaVeiculosDTO::new);
+    public ResponseEntity<Page<VeiculoDTO>> listar(@PageableDefault(size = 10) Pageable paginacao) {
+        var page = veiculoService.listarTodos(paginacao);
         return ResponseEntity.ok(page);
     }
 

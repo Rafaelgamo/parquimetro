@@ -19,11 +19,15 @@
         <insert tableName="veiculo">
             <column name="id">1</column>
             <column name="placa">ABC-1234</column>
+            <column name="modelo">Fiat Uno Mille (com escada)</column>
+            <column name="ano_fabricacao">2001</column>
         </insert>
 
         <insert tableName="veiculo">
             <column name="id">2</column>
             <column name="placa">QFG-5876</column>
+            <column name="modelo">Fusca</column>
+            <column name="ano_fabricacao">1996</column>
         </insert>
     </changeSet>
 

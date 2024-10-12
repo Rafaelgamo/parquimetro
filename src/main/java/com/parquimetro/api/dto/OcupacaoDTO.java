@@ -1,18 +1,27 @@
 package com.parquimetro.api.dto;
 
+import com.parquimetro.api.entitys.Ocupacao;
 
-import jakarta.validation.constraints.NotBlank;
-
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
 public record OcupacaoDTO(
-
-        LocalTime entrada,
-        String saida,
-        long permanencia,
-        float valor,
-        boolean Status
+        Long idVaga,
+        Long idVeiculo,
+        Integer tempoReservado,
+        Float valorEmReais,
+        Float tarifaAplicada,
+        LocalDateTime horarioEntrada,
+        LocalDateTime horarioSaida
 ) {
-
-
+    public OcupacaoDTO(Ocupacao ocupacaoSalva) {
+        this(
+                ocupacaoSalva.getVaga().getId(),
+                ocupacaoSalva.getVeiculo().getId(),
+                ocupacaoSalva.getMinutosReservados(),
+                ocupacaoSalva.getValorEmReais(),
+                ocupacaoSalva.getTarifaAplicada(),
+                ocupacaoSalva.getHorarioEntrada(),
+                ocupacaoSalva.getHorarioSaida()
+        );
+    }
 }

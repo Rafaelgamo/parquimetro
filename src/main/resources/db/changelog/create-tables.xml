@@ -17,6 +17,9 @@
             <column name="placa" type="VARCHAR(10)">
                 <constraints nullable="false" unique="true" />
             </column>
+
+            <column name="modelo" type="VARCHAR(80)" />
+            <column name="ano_fabricacao" type="VARCHAR(10)" />
         </createTable>
 
         <createIndex unique="true" indexName="veiculo_id" tableName="veiculo">
@@ -58,7 +61,7 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="ocupada" type="bit" defaultValue="0" />
+            <column name="ocupada" type="boolean" defaultValueBoolean="false" />
 
         </createTable>
 
