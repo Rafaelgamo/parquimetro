@@ -1,37 +1,37 @@
 package com.parquimetro.api.controller;
 
-import com.parquimetro.api.dto.*;
-import com.parquimetro.api.entitys.Parquimetros;
-import com.parquimetro.api.repository.ParquimetrosRepository;
+import com.parquimetro.api.dto.CreatedEntityIdDTO;
+import com.parquimetro.api.dto.ParquimetroDTO;
+import com.parquimetro.api.services.ParquimetroService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/parquimetros")
 public class ParquimetroController {
 
-    @Autowired /* */
-    private ParquimetrosRepository parquimetrosRepository;  /*vincula as bibliotecas do jpa, que esta como abstrato em interface */
+    @Autowired
+    private ParquimetroService parquimetroService;
 
     @PostMapping
-    @Transactional
-    public ResponseEntity cadastroParquimetro(@RequestBody ParquimetrosDTO dados, UriComponentsBuilder uriBuilder) { /* Recebe dos dados para salvar */
-        var parquimetro = new Parquimetros(dados);
-        parquimetrosRepository.save(parquimetro);
-
-        var uri = uriBuilder.path("/parquimetros/{id}").buildAndExpand(parquimetro).toUri();
-        return ResponseEntity.created(uri).body(new DetalhamentoParquimetroDTO(parquimetro));
+    public ResponseEntity<CreatedEntityIdDTO> cadastroParquimetro(@Valid @RequestBody ParquimetroDTO dados) {
+        var idCadastrado = parquimetroService.cadastrarParquimetro(dados);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new CreatedEntityIdDTO(idCadastrado));
     }
 
     @GetMapping
-    public ResponseEntity<Page<ConsultaParquimetroDTO>> listarParquimetros(@PageableDefault(size = 10, sort = {"endereco"}) Pageable paginacao) {  /* mapeia  para mostrar paginação  e consultadar dados do banco*/
-        var page = parquimetrosRepository.findAll(paginacao).map(ConsultaParquimetroDTO::new);
+    public ResponseEntity<Page<ParquimetroDTO>> listarParquimetros(@PageableDefault(size = 10) Pageable paginacao) {
+        var page = parquimetroService.listarTodos(paginacao);
         return ResponseEntity.ok(page);
     }
 }

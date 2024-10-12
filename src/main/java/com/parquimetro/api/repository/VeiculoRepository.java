@@ -1,13 +1,10 @@
 package com.parquimetro.api.repository;
 
-import com.parquimetro.api.entitys.Veiculos;
+import com.parquimetro.api.entitys.Veiculo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 
 @Repository
-public interface VeiculosRepository extends JpaRepository<Veiculos, Long> {
-
-    }
-
-
+public interface VeiculoRepository extends JpaRepository<Veiculo, Long> {
+}

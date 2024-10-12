@@ -2,11 +2,23 @@ package com.parquimetro.api.dto;
 
 import com.parquimetro.api.entitys.Ocupacao;
 
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 
-public record DetalhamentoOcupacaoDTO( Long id, LocalTime entrada, String saida, Long permanencia, float valor) {
+public record DetalhamentoOcupacaoDTO(
+        Long id,
+        LocalDateTime entrada,
+        LocalDateTime saida,
+        Integer permanencia,
+        Float valor
+) {
 
-    public DetalhamentoOcupacaoDTO(Ocupacao ocupacao){
-        this(ocupacao.getId(),ocupacao.getEntrada(), ocupacao.getSaida(), ocupacao.getPermanecia(), ocupacao.getValor());
+    public DetalhamentoOcupacaoDTO(Ocupacao ocupacao) {
+        this(
+                ocupacao.getId(),
+                ocupacao.getHorarioEntrada(),
+                ocupacao.getHorarioSaida(),
+                ocupacao.getMinutosReservados(),
+                ocupacao.getValorEmReais()
+        );
     }
 }
