@@ -22,8 +22,17 @@ public class VagaService {
     }
 
     @Transactional(readOnly = true)
-    public List<Vaga> listarVagasDisponveis() {
-        return vagaRepository.findAllByOcupadaFalse();
+    public Vaga buscarPorId(Long idVaga) {
+        var entidade = vagaRepository.findById(idVaga).orElse(null);
+        return entidade;
+    }
+
+    @Transactional(readOnly = true)
+    public List<VagaDTO> listarVagasDisponveis() {
+        return vagaRepository.findAllByOcupadaFalse()
+                .stream()
+                .map(VagaDTO::new)
+                .toList();
     }
 
     @Transactional
@@ -56,4 +65,7 @@ public class VagaService {
         return vagaSalva.getId();
     }
 
+    public void liberarVaga(Long idVaga) {
+        vagaRepository.liberarVaga(idVaga);
+    }
 }

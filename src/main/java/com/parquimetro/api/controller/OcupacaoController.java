@@ -1,17 +1,18 @@
 package com.parquimetro.api.controller;
 
-import com.parquimetro.api.dto.CreatedEntityIdDTO;
+import com.parquimetro.api.dto.LiberarVagaDTO;
+import com.parquimetro.api.dto.OcupacaoDTO;
 import com.parquimetro.api.dto.OcuparVagaDTO;
 import com.parquimetro.api.services.OcupacaoService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping("/ocupacao")
+@RequestMapping("/")
 public class OcupacaoController {
 
     private final OcupacaoService ocupacaoService;
@@ -20,11 +21,17 @@ public class OcupacaoController {
         this.ocupacaoService = ocupacaoService;
     }
 
-    @PostMapping
-    public ResponseEntity<CreatedEntityIdDTO> cadastroOcupacao(@RequestBody OcuparVagaDTO dados, UriComponentsBuilder uriBuilder) {
-        var ocupacao = ocupacaoService.ocuparVaga(dados);
-        var uri = uriBuilder.path("/tb_ocupacao/{id}").buildAndExpand(ocupacao.getId()).toUri();
-        return ResponseEntity.created(uri).body(new CreatedEntityIdDTO(ocupacao.getId()));
+
+    @PostMapping("/solicitar-ocupacao")
+    public ResponseEntity<OcupacaoDTO> cadastroOcupacao(@Valid @RequestBody OcuparVagaDTO ocuparVagaDTO) {
+        var ocupacao = ocupacaoService.ocuparVaga(ocuparVagaDTO);
+        return ResponseEntity.ok(ocupacao);
+    }
+
+    @PostMapping("/liberar-vaga")
+    public ResponseEntity<Void> liberarVaga(@Valid @RequestBody LiberarVagaDTO liberarVagaDTO) {
+        ocupacaoService.liberarVaga(liberarVagaDTO);
+        return ResponseEntity.ok().build();
     }
 
 }

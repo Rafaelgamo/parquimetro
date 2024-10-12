@@ -61,7 +61,7 @@
                 <constraints nullable="false"/>
             </column>
 
-            <column name="ocupada" type="bit" defaultValueComputed="B'0'" />
+            <column name="ocupada" type="boolean" defaultValueBoolean="false" />
 
         </createTable>
 

@@ -35,4 +35,14 @@ public class VeiculoService {
     public Page<VeiculoDTO> listarTodos(Pageable paginacao) {
         return veiculoRepository.findAll(paginacao).map(VeiculoDTO::new);
     }
+
+    @Transactional(readOnly = true)
+    public boolean existePorId(Long idVeiculo) {
+        return veiculoRepository.existsById(idVeiculo);
+    }
+
+    @Transactional
+    public Veiculo buscarPorId(Long idVeiculo) {
+        return veiculoRepository.findById(idVeiculo).orElse(null);
+    }
 }
