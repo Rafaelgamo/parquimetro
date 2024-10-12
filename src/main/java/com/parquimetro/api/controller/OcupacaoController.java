@@ -3,7 +3,7 @@ package com.parquimetro.api.controller;
 import com.parquimetro.api.dto.LiberarVagaDTO;
 import com.parquimetro.api.dto.OcupacaoDTO;
 import com.parquimetro.api.dto.OcuparVagaDTO;
-import com.parquimetro.api.services.OcupacaoService;
+import com.parquimetro.api.service.OcupacaoService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;

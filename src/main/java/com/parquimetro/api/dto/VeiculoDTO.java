@@ -1,11 +1,12 @@
 package com.parquimetro.api.dto;
 
-import com.parquimetro.api.entitys.Veiculo;
+import com.parquimetro.api.model.Veiculo;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
 
 public record VeiculoDTO(
+        Long id,
         @NotBlank
         @Pattern(regexp = "\\d{7}", message = "Formato da placa invalido")
         String placa,
@@ -15,6 +16,6 @@ public record VeiculoDTO(
         Integer anoFabricacao
 ) {
     public VeiculoDTO (Veiculo veiculo) {
-        this(veiculo.getPlaca(), veiculo.getModelo(), veiculo.getAnoFabricacao());
+        this(veiculo.getId(), veiculo.getPlaca(), veiculo.getModelo(), veiculo.getAnoFabricacao());
     }
 }

@@ -1,7 +1,7 @@
-package com.parquimetro.api.services;
+package com.parquimetro.api.service;
 
 import com.parquimetro.api.dto.VeiculoDTO;
-import com.parquimetro.api.entitys.Veiculo;
+import com.parquimetro.api.model.Veiculo;
 import com.parquimetro.api.repository.VeiculoRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -44,5 +44,9 @@ public class VeiculoService {
     @Transactional
     public Veiculo buscarPorId(Long idVeiculo) {
         return veiculoRepository.findById(idVeiculo).orElse(null);
+    }
+
+    public Veiculo buscarPelaPlaca(String placaVeiculo) {
+        return veiculoRepository.findByPlaca(placaVeiculo).orElse(null);
     }
 }

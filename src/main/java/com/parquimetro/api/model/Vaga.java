@@ -1,4 +1,4 @@
-package com.parquimetro.api.entitys;
+package com.parquimetro.api.model;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

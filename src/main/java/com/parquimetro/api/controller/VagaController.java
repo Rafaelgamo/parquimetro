@@ -2,7 +2,7 @@ package com.parquimetro.api.controller;
 
 import com.parquimetro.api.dto.CreatedEntityIdDTO;
 import com.parquimetro.api.dto.VagaDTO;
-import com.parquimetro.api.services.VagaService;
+import com.parquimetro.api.service.VagaService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

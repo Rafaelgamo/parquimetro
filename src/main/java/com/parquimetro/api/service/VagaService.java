@@ -1,10 +1,11 @@
-package com.parquimetro.api.services;
+package com.parquimetro.api.service;
 
 
 import com.parquimetro.api.dto.VagaDTO;
-import com.parquimetro.api.entitys.Parquimetro;
-import com.parquimetro.api.entitys.Vaga;
+import com.parquimetro.api.model.Parquimetro;
+import com.parquimetro.api.model.Vaga;
 import com.parquimetro.api.repository.VagaRepository;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +17,7 @@ public class VagaService {
     private final VagaRepository vagaRepository;
     private final ParquimetroService parquimetroService;
 
-    public VagaService(VagaRepository vagaRepository, ParquimetroService parquimetroService) {
+    public VagaService(VagaRepository vagaRepository, @Lazy ParquimetroService parquimetroService) {
         this.vagaRepository = vagaRepository;
         this.parquimetroService = parquimetroService;
     }
@@ -65,7 +66,13 @@ public class VagaService {
         return vagaSalva.getId();
     }
 
+    @Transactional
     public void liberarVaga(Long idVaga) {
         vagaRepository.liberarVaga(idVaga);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Long> buscarPorParquimetro(Long idParquimetro) {
+        return vagaRepository.listarVagasDisponiveisPorParquimetro(idParquimetro);
     }
 }

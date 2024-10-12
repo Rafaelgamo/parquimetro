@@ -1,10 +1,11 @@
-package com.parquimetro.api.services;
+package com.parquimetro.api.service;
 
 
 import com.parquimetro.api.dto.LiberarVagaDTO;
 import com.parquimetro.api.dto.OcupacaoDTO;
 import com.parquimetro.api.dto.OcuparVagaDTO;
-import com.parquimetro.api.entitys.Ocupacao;
+import com.parquimetro.api.infra.errors.exceptions.ErroDeValidacao;
+import com.parquimetro.api.model.Ocupacao;
 import com.parquimetro.api.repository.OcupacaoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,28 +29,28 @@ public class OcupacaoService {
     public OcupacaoDTO ocuparVaga(OcuparVagaDTO ocuparVagaDTO) {
         var idVaga = ocuparVagaDTO.idVaga();
         var tempoRequisitado = ocuparVagaDTO.tempoEmMinutos();
-        var idVeiculo = ocuparVagaDTO.idVeiculo();
+        var placaVeiculo = ocuparVagaDTO.placaVeiculo();
 
         var tempoRequisitadoEhValido = tempoRequisitado % 15 == 0
                 && tempoRequisitado >= 15
                 && tempoRequisitado <= 120;
         if (!tempoRequisitadoEhValido) {
-            throw new RuntimeException ("Tempo Invalido para reserva... Opcoes de tempo para reservar (em minutos): 15, 30, 45, 60, 75, 90, 105, 120");
+            throw new ErroDeValidacao("Tempo Invalido para reserva... Opcoes de tempo para reservar (em minutos): 15, 30, 45, 60, 75, 90, 105, 120");
         }
 
         var vaga = vagaService.buscarPorId(idVaga);
         if (vaga == null) {
-            throw new RuntimeException("Vaga nao encontrada...");
+            throw new ErroDeValidacao("Vaga nao encontrada...");
         }
 
         var vagaJaOcupada = vaga.getOcupada();
         if (vagaJaOcupada) {
-            throw new RuntimeException("Vaga ja ocupada, tente listar as vagas disponiveis em: /parquimetros/[id_parquimetro]");
+            throw new ErroDeValidacao("Vaga ja ocupada, tente listar as vagas disponiveis em: /parquimetros/[id_parquimetro]");
         }
 
-        var veiculo = veiculoService.buscarPorId(idVeiculo);
+        var veiculo = veiculoService.buscarPelaPlaca(placaVeiculo);
         if (veiculo == null) {
-            throw new RuntimeException("Vaga nao cadastrado, cadastre primeiro em: POST - /veiculos");
+            throw new ErroDeValidacao("Vaga nao cadastrado, cadastre primeiro em: POST - /veiculos");
         }
 
         var parquimetroControlador = vaga.getParquimetro();

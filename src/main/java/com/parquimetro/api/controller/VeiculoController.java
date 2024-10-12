@@ -2,8 +2,10 @@ package com.parquimetro.api.controller;
 
 
 import com.parquimetro.api.dto.CreatedEntityIdDTO;
+import com.parquimetro.api.dto.OcupacaoDTO;
 import com.parquimetro.api.dto.VeiculoDTO;
-import com.parquimetro.api.services.VeiculoService;
+import com.parquimetro.api.service.VeiculoService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -23,6 +25,13 @@ public class VeiculoController {
 
     public VeiculoController(VeiculoService veiculoService) {
         this.veiculoService = veiculoService;
+    }
+
+    @Operation(description = "AINDA NAO TA IMPLEMENTADO")
+    @GetMapping("/historico/{idVeiculo}")
+    public ResponseEntity<OcupacaoDTO> listarHistoricoDoVeiculo() {
+        // TODO: implementar
+        return null;
     }
 
     @PostMapping
