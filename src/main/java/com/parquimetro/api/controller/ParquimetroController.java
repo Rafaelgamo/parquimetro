@@ -3,7 +3,7 @@ package com.parquimetro.api.controller;
 import com.parquimetro.api.dto.CreatedEntityIdDTO;
 import com.parquimetro.api.dto.DetalhamentoParquimetroDTO;
 import com.parquimetro.api.dto.ParquimetroDTO;
-import com.parquimetro.api.services.ParquimetroService;
+import com.parquimetro.api.service.ParquimetroService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -29,9 +29,8 @@ public class ParquimetroController {
 
     @GetMapping("/{idParquimetro}")
     public ResponseEntity<DetalhamentoParquimetroDTO> detalharParquimetro(@PathVariable(name = "idParquimetro") Long idParquimetro) {
-
-
-        return null;
+        var detalhamentoParquimetroDTO = parquimetroService.detalharParquimetro(idParquimetro);
+        return ResponseEntity.ok(detalhamentoParquimetroDTO);
     }
 
     @GetMapping

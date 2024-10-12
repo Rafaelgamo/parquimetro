@@ -1,6 +1,6 @@
 package com.parquimetro.api.dto;
 
-import com.parquimetro.api.entitys.Parquimetro;
+import com.parquimetro.api.model.Parquimetro;
 
 public record ParquimetroDTO(
         Long id,

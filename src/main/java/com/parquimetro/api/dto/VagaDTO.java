@@ -1,6 +1,6 @@
 package com.parquimetro.api.dto;
 
-import com.parquimetro.api.entitys.Vaga;
+import com.parquimetro.api.model.Vaga;
 
 public record VagaDTO (
         Long idParquimetro,

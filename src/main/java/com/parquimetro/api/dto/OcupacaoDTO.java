@@ -1,6 +1,6 @@
 package com.parquimetro.api.dto;
 
-import com.parquimetro.api.entitys.Ocupacao;
+import com.parquimetro.api.model.Ocupacao;
 
 import java.time.LocalDateTime;
 

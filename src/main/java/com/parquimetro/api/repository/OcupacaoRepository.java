@@ -1,7 +1,7 @@
 package com.parquimetro.api.repository;
 
 
-import com.parquimetro.api.entitys.Ocupacao;
+import com.parquimetro.api.model.Ocupacao;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
