@@ -2,6 +2,7 @@ package com.parquimetro.api.service;
 
 
 import com.parquimetro.api.dto.VagaDTO;
+import com.parquimetro.api.infra.errors.exceptions.ErroDeValidacao;
 import com.parquimetro.api.model.Parquimetro;
 import com.parquimetro.api.model.Vaga;
 import com.parquimetro.api.repository.VagaRepository;
@@ -41,7 +42,7 @@ public class VagaService {
         var vaga = vagaRepository.findById(idVaga);
 
         if (vaga.isEmpty()) {
-            throw new RuntimeException("Vaga nao existe pelo id: " + idVaga);
+            throw new ErroDeValidacao("Vaga nao existe pelo id: " + idVaga);
         }
 
         return vaga.get().getOcupada();
@@ -49,17 +50,17 @@ public class VagaService {
 
     @Transactional
     public Long cadastrarVaga(VagaDTO vagaDTO) {
-        var vaga = new Vaga();
-
         var idParquimetro = vagaDTO.idParquimetro();
+
         boolean parquimetroExiste = parquimetroService.existePorId(idParquimetro);
         if (!parquimetroExiste) {
-            throw new RuntimeException("Parquimetro especificado nao existe");
+            throw new ErroDeValidacao("Parquimetro especificado nao existe");
         }
 
         var parquimetro = new Parquimetro();
         parquimetro.setId(idParquimetro);
 
+        var vaga = new Vaga();
         vaga.setParquimetro(parquimetro);
 
         var vagaSalva = vagaRepository.save(vaga);
@@ -72,7 +73,7 @@ public class VagaService {
     }
 
     @Transactional(readOnly = true)
-    public List<Long> buscarPorParquimetro(Long idParquimetro) {
+    public List<Long> buscarIdsDisponiveisPorParquimetro(Long idParquimetro) {
         return vagaRepository.listarVagasDisponiveisPorParquimetro(idParquimetro);
     }
 }

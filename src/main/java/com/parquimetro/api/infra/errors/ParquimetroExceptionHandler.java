@@ -14,13 +14,13 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
 public class ParquimetroExceptionHandler {
 
     @ExceptionHandler(EnumConstantNotPresentException.class)
-    public ResponseEntity<Object> tratarError404(){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Recurso não encontrado");
+    public ResponseEntity<Object> tratarError404() {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Erro("Recurso não encontrado"));
     }
 
     @ExceptionHandler(ErroDeValidacao.class)
-    public ResponseEntity<String> tratarErroDeValidacao(ErroDeValidacao ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+    public ResponseEntity<Object> tratarErroDeValidacao(ErroDeValidacao ex) {
+        return ResponseEntity.badRequest().body(new Erro(ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -30,13 +30,13 @@ public class ParquimetroExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity handleBadRequest2(HttpMessageNotReadableException ex) {
-        return ResponseEntity.badRequest().body(ex.getMessage());
+    public ResponseEntity<Object> handleBadRequest2(HttpMessageNotReadableException ex) {
+        return ResponseEntity.badRequest().body(new Erro(ex.getMessage()));
     }
 
     @ExceptionHandler(HandlerMethodValidationException.class)
-    public ResponseEntity handleBadRequest3(HandlerMethodValidationException ex) {
-        return ResponseEntity.badRequest().body("Bad Request: Verificar formatações do corpo da requisição");
+    public ResponseEntity<Object> handleBadRequest3(HandlerMethodValidationException ex) {
+        return ResponseEntity.badRequest().body(new Erro("Bad Request: Verificar formatações do corpo da requisição"));
     }
 
     private record DadosErroValidacao(String campo, String mensagem){
@@ -44,4 +44,6 @@ public class ParquimetroExceptionHandler {
             this(erro.getField(), erro.getDefaultMessage());
         }
     }
+
+    private record Erro(String erro) {}
 }

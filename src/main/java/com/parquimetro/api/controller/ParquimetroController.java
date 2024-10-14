@@ -4,6 +4,7 @@ import com.parquimetro.api.dto.CreatedEntityIdDTO;
 import com.parquimetro.api.dto.DetalhamentoParquimetroDTO;
 import com.parquimetro.api.dto.ParquimetroDTO;
 import com.parquimetro.api.service.ParquimetroService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/parquimetros")
+@Tag(name = "parquimetros", description = "Gerir parquimetros")
 public class ParquimetroController {
 
     private final ParquimetroService parquimetroService;
@@ -28,7 +30,7 @@ public class ParquimetroController {
     }
 
     @GetMapping("/{idParquimetro}")
-    public ResponseEntity<DetalhamentoParquimetroDTO> detalharParquimetro(@PathVariable(name = "idParquimetro") Long idParquimetro) {
+    public ResponseEntity<DetalhamentoParquimetroDTO> detalharParquimetro(@PathVariable("idParquimetro") Long idParquimetro) {
         var detalhamentoParquimetroDTO = parquimetroService.detalharParquimetro(idParquimetro);
         return ResponseEntity.ok(detalhamentoParquimetroDTO);
     }
