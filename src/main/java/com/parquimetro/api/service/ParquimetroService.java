@@ -2,6 +2,7 @@ package com.parquimetro.api.service;
 
 import com.parquimetro.api.dto.DetalhamentoParquimetroDTO;
 import com.parquimetro.api.dto.ParquimetroDTO;
+import com.parquimetro.api.infra.errors.exceptions.ErroDeValidacao;
 import com.parquimetro.api.model.Parquimetro;
 import com.parquimetro.api.repository.ParquimetroRepository;
 import org.springframework.context.annotation.Lazy;
@@ -29,7 +30,7 @@ public class ParquimetroService {
 
         var parquimetroSalvo = parquimetroRepository.save(parquimetro);
         if (parquimetroSalvo == null) {
-            throw new RuntimeException("Falha ao cadastrar parquimetro...");
+            throw new ErroDeValidacao("Falha ao cadastrar parquimetro...");
         }
 
         return parquimetroSalvo.getId();
@@ -49,10 +50,10 @@ public class ParquimetroService {
         var parquimetro = buscarPorId(idParquimetro);
 
         if (parquimetro == null) {
-            throw new RuntimeException("Parquimetro nao encontrado...");
+            throw new ErroDeValidacao("Parquimetro nao encontrado...");
         }
 
-        var vagasDoParquimetro = vagaService.buscarPorParquimetro(idParquimetro);
+        var vagasDoParquimetro = vagaService.buscarIdsDisponiveisPorParquimetro(idParquimetro);
 
         return new DetalhamentoParquimetroDTO(parquimetro, vagasDoParquimetro);
     }

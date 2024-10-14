@@ -1,6 +1,8 @@
 package com.parquimetro.api.service;
 
 
+import com.parquimetro.api.dto.HistoricoVeiculoDTO;
+import com.parquimetro.api.dto.ItemHistoricoVeiculoDTO;
 import com.parquimetro.api.dto.LiberarVagaDTO;
 import com.parquimetro.api.dto.OcupacaoDTO;
 import com.parquimetro.api.dto.OcuparVagaDTO;
@@ -77,9 +79,34 @@ public class OcupacaoService {
     @Transactional
     public void liberarVaga(LiberarVagaDTO liberarVagaDTO) {
         var idVaga = liberarVagaDTO.idVaga();
-        var idVeiculo = liberarVagaDTO.idVeiculo();
+        var placa = liberarVagaDTO.placa();
+
+        var idVeiculo = veiculoService.buscarIdPelaPlaca(placa);
+        if (idVeiculo == null) {
+            throw new ErroDeValidacao("Veiculo nao encontrado pela placa: " + placa);
+        }
 
         ocupacaoRepository.atualizarHorarioDeSaida(LocalDateTime.now(), idVaga, idVeiculo);
         vagaService.liberarVaga(idVaga);
+    }
+
+    @Transactional
+    public HistoricoVeiculoDTO buscarHistoricoDoVeiculo(Long idVeiculo) {
+        var veiculo = veiculoService.buscarPorId(idVeiculo);
+        var ocupacoesDoVeiculo = ocupacaoRepository.findAllByVeiculo(veiculo);
+
+        var listaHistorico = ocupacoesDoVeiculo
+                .stream()
+                .map(ItemHistoricoVeiculoDTO::new)
+                .toList();
+
+        var historico = new HistoricoVeiculoDTO(
+                veiculo.getPlaca(),
+                veiculo.getModelo(),
+                veiculo.getAnoFabricacao(),
+                listaHistorico
+        );
+
+        return historico;
     }
 }

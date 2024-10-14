@@ -2,10 +2,9 @@ package com.parquimetro.api.controller;
 
 
 import com.parquimetro.api.dto.CreatedEntityIdDTO;
-import com.parquimetro.api.dto.OcupacaoDTO;
 import com.parquimetro.api.dto.VeiculoDTO;
 import com.parquimetro.api.service.VeiculoService;
-import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -19,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping ("/veiculos")
+@Tag(name = "veiculos", description = "Gerir veiculos")
 public class VeiculoController {
 
     private final VeiculoService veiculoService;
@@ -27,16 +27,9 @@ public class VeiculoController {
         this.veiculoService = veiculoService;
     }
 
-    @Operation(description = "AINDA NAO TA IMPLEMENTADO")
-    @GetMapping("/historico/{idVeiculo}")
-    public ResponseEntity<OcupacaoDTO> listarHistoricoDoVeiculo() {
-        // TODO: implementar
-        return null;
-    }
-
     @PostMapping
-    public ResponseEntity<CreatedEntityIdDTO> cadastroEstacionar(@RequestBody VeiculoDTO dados) {
-        var idCadastrado = veiculoService.cadastrarVeiculo(dados);
+    public ResponseEntity<CreatedEntityIdDTO> cadastroEstacionar(@RequestBody VeiculoDTO veiculoDTO) {
+        var idCadastrado = veiculoService.cadastrarVeiculo(veiculoDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(new CreatedEntityIdDTO(idCadastrado));
     }
 
