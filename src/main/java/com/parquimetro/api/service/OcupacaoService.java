@@ -93,6 +93,10 @@ public class OcupacaoService {
     @Transactional
     public HistoricoVeiculoDTO buscarHistoricoDoVeiculo(Long idVeiculo) {
         var veiculo = veiculoService.buscarPorId(idVeiculo);
+        if (veiculo == null) {
+            throw new ErroDeValidacao("Veiculo nao encontrado");
+        }
+
         var ocupacoesDoVeiculo = ocupacaoRepository.findAllByVeiculo(veiculo);
 
         var listaHistorico = ocupacoesDoVeiculo
