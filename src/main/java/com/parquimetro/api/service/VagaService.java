@@ -3,6 +3,7 @@ package com.parquimetro.api.service;
 
 import com.parquimetro.api.dto.VagaDTO;
 import com.parquimetro.api.infra.errors.exceptions.ErroDeValidacao;
+import com.parquimetro.api.infra.errors.exceptions.RecursoNaoEncontrado;
 import com.parquimetro.api.model.Parquimetro;
 import com.parquimetro.api.model.Vaga;
 import com.parquimetro.api.repository.VagaRepository;
@@ -75,5 +76,15 @@ public class VagaService {
     @Transactional(readOnly = true)
     public List<Long> buscarIdsDisponiveisPorParquimetro(Long idParquimetro) {
         return vagaRepository.listarVagasDisponiveisPorParquimetro(idParquimetro);
+    }
+
+    @Transactional
+    public void excluirVaga(Long idVaga) {
+        boolean vagaExiste = vagaRepository.existsById(idVaga);
+        if (!vagaExiste) {
+            throw new RecursoNaoEncontrado(Vaga.class, "id", idVaga);
+        }
+
+        vagaRepository.deleteById(idVaga);
     }
 }

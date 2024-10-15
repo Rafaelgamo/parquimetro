@@ -1,5 +1,6 @@
 package com.parquimetro.api.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -13,7 +14,10 @@ public class Parquimetro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(unique = true)
     private String endereco;
+
     private Float valorTarifaAtual;
 
     public Parquimetro(Long id, String endereco, Float valorTarifaAtual) {

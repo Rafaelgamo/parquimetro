@@ -38,7 +38,7 @@
             </column>
 
             <column name="endereco" type="VARCHAR(120)">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true" />
             </column>
 
             <column name="valor_tarifa_atual" type="FLOAT">

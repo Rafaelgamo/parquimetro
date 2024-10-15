@@ -1,8 +1,8 @@
 package com.parquimetro.api.service;
 
 import com.parquimetro.api.dto.VeiculoDTO;
-import com.parquimetro.api.infra.errors.exceptions.EntidadeJaExiste;
 import com.parquimetro.api.infra.errors.exceptions.ErroDeValidacao;
+import com.parquimetro.api.infra.errors.exceptions.RecursoJaCadastrado;
 import com.parquimetro.api.model.Veiculo;
 import com.parquimetro.api.repository.VeiculoRepository;
 import org.springframework.data.domain.Page;
@@ -29,7 +29,7 @@ public class VeiculoService {
 
         boolean placaJaCadastrada = veiculoRepository.existsByPlaca(placa);
         if (placaJaCadastrada) {
-            throw new EntidadeJaExiste(Veiculo.class, "placa", placa);
+            throw new RecursoJaCadastrado(Veiculo.class, "placa", placa);
         }
 
         var veiculoSalvo = veiculoRepository.save(veiculo);

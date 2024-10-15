@@ -1,6 +1,7 @@
 package com.parquimetro.api.infra.errors;
 
 import com.parquimetro.api.infra.errors.exceptions.ErroDeValidacao;
+import com.parquimetro.api.infra.errors.exceptions.RecursoNaoEncontrado;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -12,6 +13,11 @@ import org.springframework.web.method.annotation.HandlerMethodValidationExceptio
 
 @RestControllerAdvice
 public class ParquimetroExceptionHandler {
+
+    @ExceptionHandler(RecursoNaoEncontrado.class)
+    public ResponseEntity<Object> recursoNaoEncontrado404(RecursoNaoEncontrado ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Erro(ex.getMessage()));
+    }
 
     @ExceptionHandler(EnumConstantNotPresentException.class)
     public ResponseEntity<Object> tratarError404() {
@@ -45,5 +51,5 @@ public class ParquimetroExceptionHandler {
         }
     }
 
-    private record Erro(String erro) {}
+    public record Erro(String erro) {}
 }

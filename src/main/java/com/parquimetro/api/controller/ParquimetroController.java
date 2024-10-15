@@ -1,5 +1,6 @@
 package com.parquimetro.api.controller;
 
+import com.parquimetro.api.dto.AlterarTarifaParquimetroDTO;
 import com.parquimetro.api.dto.CreatedEntityIdDTO;
 import com.parquimetro.api.dto.DetalhamentoParquimetroDTO;
 import com.parquimetro.api.dto.ParquimetroDTO;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -45,5 +47,15 @@ public class ParquimetroController {
     public ResponseEntity<CreatedEntityIdDTO> cadastroParquimetro(@Valid @RequestBody ParquimetroDTO dados) {
         var idCadastrado = parquimetroService.cadastrarParquimetro(dados);
         return ResponseEntity.status(HttpStatus.CREATED).body(new CreatedEntityIdDTO(idCadastrado));
+    }
+
+    @PutMapping()
+    public ResponseEntity<Void> alterarTarifaParquimetro(@Valid @RequestBody AlterarTarifaParquimetroDTO alterarTarifaParquimetroDTO) {
+        parquimetroService.alterarTarifaParquimetro(
+                alterarTarifaParquimetroDTO.idParquimetro(),
+                alterarTarifaParquimetroDTO.novoValorTarifa()
+        );
+
+        return ResponseEntity.noContent().build();
     }
 }

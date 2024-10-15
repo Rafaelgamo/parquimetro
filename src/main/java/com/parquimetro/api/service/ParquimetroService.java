@@ -3,6 +3,7 @@ package com.parquimetro.api.service;
 import com.parquimetro.api.dto.DetalhamentoParquimetroDTO;
 import com.parquimetro.api.dto.ParquimetroDTO;
 import com.parquimetro.api.infra.errors.exceptions.ErroDeValidacao;
+import com.parquimetro.api.infra.errors.exceptions.RecursoNaoEncontrado;
 import com.parquimetro.api.model.Parquimetro;
 import com.parquimetro.api.repository.ParquimetroRepository;
 import org.springframework.context.annotation.Lazy;
@@ -28,11 +29,12 @@ public class ParquimetroService {
         parquimetro.setValorTarifaAtual(dados.tarifaAtual());
         parquimetro.setEndereco(dados.endereco());
 
-        var parquimetroSalvo = parquimetroRepository.save(parquimetro);
-        if (parquimetroSalvo == null) {
-            throw new ErroDeValidacao("Falha ao cadastrar parquimetro...");
+        boolean parquimetroCadastrado = parquimetroRepository.existsByEndereco(dados.endereco());
+        if (parquimetroCadastrado) {
+            throw new ErroDeValidacao("Parquimetro ja cadastrado com esse endereco");
         }
 
+        var parquimetroSalvo = parquimetroRepository.save(parquimetro);
         return parquimetroSalvo.getId();
     }
 
@@ -46,16 +48,27 @@ public class ParquimetroService {
         return parquimetroRepository.existsById(idParquimetro);
     }
 
+    @Transactional(readOnly = true)
     public DetalhamentoParquimetroDTO detalharParquimetro(Long idParquimetro) {
         var parquimetro = buscarPorId(idParquimetro);
 
         if (parquimetro == null) {
-            throw new ErroDeValidacao("Parquimetro nao encontrado...");
+            throw new RecursoNaoEncontrado(Parquimetro.class, "id", idParquimetro);
         }
 
         var vagasDoParquimetro = vagaService.buscarIdsDisponiveisPorParquimetro(idParquimetro);
 
         return new DetalhamentoParquimetroDTO(parquimetro, vagasDoParquimetro);
+    }
+
+    @Transactional
+    public void alterarTarifaParquimetro(Long idParquimetro, float novoValorTarifa) {
+        boolean parquimetroExiste = parquimetroRepository.existsById(idParquimetro);
+        if (!parquimetroExiste) {
+            throw new RecursoNaoEncontrado(Parquimetro.class, "id", idParquimetro);
+        }
+
+        parquimetroRepository.alterarTarifa(idParquimetro, novoValorTarifa);
     }
 
     public Parquimetro buscarPorId(Long idParquimetro) {

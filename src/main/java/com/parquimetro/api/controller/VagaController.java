@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +38,12 @@ public class VagaController {
     public ResponseEntity<List<Long>> idsVagasDisponiveisPorParquinetro(@PathVariable("idParquimetro") Long idParquimetro) {
         var vagasDisponiveis = vagaService.buscarIdsDisponiveisPorParquimetro(idParquimetro);
         return ResponseEntity.ok(vagasDisponiveis);
+    }
+
+    @DeleteMapping("/{idVaga}")
+    public ResponseEntity<Void> excluirVaga(@PathVariable("idVaga") Long idVaga) {
+        vagaService.excluirVaga(idVaga);
+        return ResponseEntity.noContent().build();
     }
 
 }
