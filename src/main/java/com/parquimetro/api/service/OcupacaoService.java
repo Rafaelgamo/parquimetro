@@ -7,7 +7,10 @@ import com.parquimetro.api.dto.LiberarVagaDTO;
 import com.parquimetro.api.dto.OcupacaoDTO;
 import com.parquimetro.api.dto.OcuparVagaDTO;
 import com.parquimetro.api.infra.errors.exceptions.ErroDeValidacao;
+import com.parquimetro.api.infra.errors.exceptions.RecursoNaoEncontrado;
 import com.parquimetro.api.model.Ocupacao;
+import com.parquimetro.api.model.Vaga;
+import com.parquimetro.api.model.Veiculo;
 import com.parquimetro.api.repository.OcupacaoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +45,7 @@ public class OcupacaoService {
 
         var vaga = vagaService.buscarPorId(idVaga);
         if (vaga == null) {
-            throw new ErroDeValidacao("Vaga nao encontrada...");
+            throw new RecursoNaoEncontrado(Vaga.class, "id", idVaga);
         }
 
         var vagaJaOcupada = vaga.getOcupada();
@@ -52,7 +55,7 @@ public class OcupacaoService {
 
         var veiculo = veiculoService.buscarPelaPlaca(placaVeiculo);
         if (veiculo == null) {
-            throw new ErroDeValidacao("Vaga nao cadastrado, cadastre primeiro em: POST - /veiculos");
+            throw new RecursoNaoEncontrado(Veiculo.class, "placa", placaVeiculo);
         }
 
         var parquimetroControlador = vaga.getParquimetro();
@@ -83,7 +86,7 @@ public class OcupacaoService {
 
         var idVeiculo = veiculoService.buscarIdPelaPlaca(placa);
         if (idVeiculo == null) {
-            throw new ErroDeValidacao("Veiculo nao encontrado pela placa: " + placa);
+            throw new RecursoNaoEncontrado(Veiculo.class, "placa", placa);
         }
 
         ocupacaoRepository.atualizarHorarioDeSaida(LocalDateTime.now(), idVaga, idVeiculo);
@@ -94,7 +97,7 @@ public class OcupacaoService {
     public HistoricoVeiculoDTO buscarHistoricoDoVeiculo(Long idVeiculo) {
         var veiculo = veiculoService.buscarPorId(idVeiculo);
         if (veiculo == null) {
-            throw new ErroDeValidacao("Veiculo nao encontrado");
+            throw new RecursoNaoEncontrado(Veiculo.class, "id", idVeiculo);
         }
 
         var ocupacoesDoVeiculo = ocupacaoRepository.findAllByVeiculo(veiculo);
