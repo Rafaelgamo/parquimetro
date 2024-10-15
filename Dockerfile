@@ -1,3 +1,6 @@
+#
+# Building
+#
 FROM openjdk:17-jdk-slim AS build
 
 COPY pom.xml mvnw ./
@@ -8,12 +11,17 @@ RUN chmod +x ./mvnw
 RUN ./mvnw dependency:resolve
 
 COPY src src
-
 RUN ./mvnw package -DskipTests
-FROM openjdk:17-jdk-slim
 
-WORKDIR app
+#
+# Run app
+#
+FROM openjdk:17-jdk-slim AS run
 
-COPY --from=build target/*.jar app.jar
+WORKDIR /app
 
-ENTRYPOINT ["java", "-jar", "app.jar"]
+COPY --from=build /target .
+
+EXPOSE 8080:8080
+
+ENTRYPOINT ["java", "-jar", "parquimetro-api-0.0.1-dev.jar"]
