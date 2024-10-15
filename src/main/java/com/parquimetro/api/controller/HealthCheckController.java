@@ -8,12 +8,15 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "healthcheck", description = "Checar estado de disponibilidade da API")
 @RestController
-@RequestMapping("/hello-world")
+@RequestMapping("/")
 public class HealthCheckController {
 
-    @GetMapping
-    public ResponseEntity<String> info() {
-        return ResponseEntity.ok("\nPARQUIMETRO-API: Rodando\n");
+    private static final ApiInfo info = new ApiInfo("PARQUIMETRO-API: Rodando", "/swagger-ui.html");
+
+    @GetMapping(path = {"/", "/hello-world"})
+    public ResponseEntity info() {
+        return ResponseEntity.ok(info);
     }
 
+    private record ApiInfo (String info, String documentacao) {}
 }
