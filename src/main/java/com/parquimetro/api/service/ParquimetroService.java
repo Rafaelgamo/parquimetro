@@ -71,6 +71,16 @@ public class ParquimetroService {
         parquimetroRepository.alterarTarifa(idParquimetro, novoValorTarifa);
     }
 
+    @Transactional
+    public void excluirParquimetro(Long idParquimetro) {
+        boolean parquimetroExiste = parquimetroRepository.existsById(idParquimetro);
+        if (!parquimetroExiste) {
+            throw new RecursoNaoEncontrado(Parquimetro.class, "id", idParquimetro);
+        }
+
+        parquimetroRepository.deleteById(idParquimetro);
+    }
+
     public Parquimetro buscarPorId(Long idParquimetro) {
         return parquimetroRepository.findById(idParquimetro).orElse(null);
     }
